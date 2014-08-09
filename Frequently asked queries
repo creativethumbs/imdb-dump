@@ -1,0 +1,50 @@
+-------------- Exporting data from Sherlock ----------------
+
+This creates actor-rels.tsv
+
+PREFIX imdb:<http://data.linkedmdb.org/resource/movie/>
+PREFIX foaf:<http://xmlns.com/foaf/0.1/>
+PREFIX purl:<http://purl.org/dc/terms/>
+
+SELECT DISTINCT ?actorname ?actorid ?filmname ?filmid
+WHERE { 
+  
+  ?filminfo imdb:actor ?actorinfo .
+  ?actorinfo imdb:actor_name ?actorname .
+  ?actorinfo imdb:actor_actorid ?actorid .
+  
+  ?filminfo2 ?p ?actorinfo .
+  ?filminfo2 purl:title ?filmname .
+  ?filminfo2 imdb:filmid ?filmid
+  
+} ORDER BY ?actorname
+
+
+This creates director-rels.tsv
+
+PREFIX imdb:<http://data.linkedmdb.org/resource/movie/>
+PREFIX foaf:<http://xmlns.com/foaf/0.1/>
+PREFIX purl:<http://purl.org/dc/terms/>
+
+SELECT DISTINCT ?directorname ?directorid ?filmname ?filmid
+WHERE { 
+  ?filminfo imdb:director ?directorinfo .
+  ?directorinfo imdb:director_name ?directorname .
+  ?directorinfo imdb:director_directorid ?directorid .
+  
+  ?filminfo2 ?p ?directorinfo .
+  ?filminfo2 purl:title ?filmname .
+  ?filminfo2 imdb:filmid ?filmid
+  
+} ORDER BY ?directorname
+
+
+-------------- Querying with Cypher ----------------
+
+This finds the top 20 director/actor collaborations
+
+MATCH (director)-[:DIRECTED]->(movie)<-[:ACTED_IN]-(actor)
+RETURN director, actor, count(*)
+ORDER BY count(*) DESC LIMIT 20;
+
+
