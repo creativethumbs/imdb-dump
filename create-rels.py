@@ -3,7 +3,7 @@ import re
 relsFile = open('rels.csv', 'w')
      
 def createRels():
-    relsFile.write("start\tend\ttype\n")
+    relsFile.write("number:string:nodeid\tnumber:string:nodeid\ttype\n")
 
     for line in file('everything2.tsv', 'r'):
         linearray = line.split('\t')
